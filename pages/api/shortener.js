@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   const { url } = req.body;
 
   const response = await axios({
-    baseURL: 'https://urlshortener.hassuu.com',
+    baseURL: 'https://kblbet.com',
     url: '/api/short',
     method: 'post',
     headers: {

@@ -17,8 +17,8 @@ const Home = () => {
 
     try {
       const response = await axios({
-        baseURL: 'https://urlshortener.hassuu.com',
-        url: '/api/short',
+        baseURL: '/',
+        url: 'api/short',
         method: 'post',
         headers: {
           Accept: 'application/json',
@@ -29,6 +29,7 @@ const Home = () => {
       const { status, data } = response;
       checkStatus = status;
       id = data.urlId;
+      console.log(data);
     } catch (e) {
       Swal.fire('Invalid URL', 'Please enter correct one', 'question');
       console.log('error');
@@ -38,6 +39,12 @@ const Home = () => {
     if (checkStatus === 200) {
       router.push(`/shortener/${id}`);
     }
+  };
+
+  const comingSoon = (e) => {
+    e.preventDefault();
+
+    Swal.fire('Coming Soon :)', '', 'question');
   };
 
   return (
@@ -78,8 +85,10 @@ const Home = () => {
             $9/month.
           </p>
 
-          <Link href="/" className="colorButton">
-            Go Premium
+          <Link href="/">
+            <a className="colorButton" onClick={comingSoon}>
+              Go Premium
+            </a>
           </Link>
         </div>
       </main>

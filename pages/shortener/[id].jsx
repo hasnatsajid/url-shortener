@@ -3,10 +3,15 @@ import Layout from '../../components/Layout';
 import Swal from 'sweetalert2';
 import Link from 'next/link';
 
+import connectDB from '../../utils/database';
+import Url from '../../models/Url';
+
 const Shortener = ({ url }) => {
+  const urlData = JSON.parse(url);
+
   const copyText = () => {
     Swal.fire('Copied!', '', 'success');
-    navigator.clipboard.writeText(url.shortUrl);
+    navigator.clipboard.writeText(urlData.shortUrl);
   };
 
   return (
@@ -29,7 +34,7 @@ const Shortener = ({ url }) => {
               <br />
               <br />
               <div className="formUrl">
-                <input type="text" name="" value={url && url.shortUrl} readOnly id="" className="shortenurl" />
+                <input type="text" name="" value={urlData && urlData.shortUrl} readOnly id="" className="shortenurl" />
                 <div className="formButton">
                   <input type="button" value="Copy URL" className="copy" onClick={copyText} />
                 </div>
@@ -38,7 +43,9 @@ const Shortener = ({ url }) => {
 
               <p className="boxText">
                 Long URL: &nbsp;
-                <Link href="/">{url ? url.origUrl : ''}</Link>
+                <Link href="/">
+                  <a>{urlData ? urlData.origUrl : ''}</a>
+                </Link>
                 <br />
                 <br />
                 Create another <Link href="/">shortened URL</Link>
@@ -74,11 +81,23 @@ const Shortener = ({ url }) => {
 export default Shortener;
 
 export async function getServerSideProps(context) {
-  const response = await fetch(`https://urlshortener.hassuu.com/check/${context.query.id}`);
-  const data = await response.json();
-  const { url } = data;
+  const id = context.query.id;
+  let response;
+
+  await connectDB();
+
+  try {
+    const url = await Url.findOne({ urlId: id });
+    if (url) {
+      url.clicks++;
+      url.save();
+      response = JSON.stringify(url);
+    }
+  } catch (err) {
+    console.log(err.message);
+  }
 
   return {
-    props: { url }, // will be passed to the page component as props
+    props: { url: response }, // will be passed to the page component as props
   };
 }
