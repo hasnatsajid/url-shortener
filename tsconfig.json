@@ -15,6 +15,17 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "components/Layout.jsx",
+    "pages/privacy.jsx",
+    "pages/contact.jsx",
+    "pages/terms-of-service.jsx",
+    "pages/api/shortener.js",
+    "pages/index.jsx",
+    "pages/_app.jsx"
+  ],
   "exclude": ["node_modules"]
 }
